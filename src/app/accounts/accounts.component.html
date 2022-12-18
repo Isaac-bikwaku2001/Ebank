@@ -1,0 +1,50 @@
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="row m-3">
+            <div class="col-md-6 bg-success d-flex justify-content-center">
+                <form class="text-dark d-flex justify-content-center" [formGroup]="accountFormGroup" (ngSubmit)="handleSearchAccount()">
+                    <input type="text" formControlName="accountId" class="form-control m-2" placeholder="AccountId">
+                    <button type="submit" class="btn btn-primary m-1">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+                <ng-container *ngIf="account$ | async as accountDetails">
+                    <div class="mb-2">
+                        <label>ID : </label>
+                        <label><strong>{{ accountDetails.accountId }}</strong></label>
+                    </div>
+                    <div class="mb-2">
+                        <label>Balance : </label>
+                        <label><strong>{{ accountDetails.balance | number: '1.2-2' }}</strong></label>
+                    </div>
+                    <table class="table table-dark table-responsive-xl table-responsive-sm table-responsive-md table-responsive-lg">
+                        <thead>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let op of accountDetails.accountOperationDTOS">
+                                <td>{{ op.id }}</td>
+                                <td>{{ op.operationDate | date: 'dd-MM-yyyy' }}</td>
+                                <td>{{ op.type }}</td>
+                                <td>{{ op.amount | number: '1.2-2' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ul class="nav nav-pills">
+                        <li *ngFor="let item of [].constructor(accountDetails.totalPages); let page = index">
+                            <a [ngClass]="page == currentPage ? 'btn-info' : 'btn-outline-info'" (click)="gotoPage(page)" class="btn ms-1 mt-1">{{ page }}</a>
+                        </li>
+                    </ul>
+                </ng-container>
+            </div>
+            <div class="col-md-6 bg-danger">
+                <form class="text-dark" [formGroup]="operationFormGroup" (ngSubmit)="handleAccountOperation()">
+
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
